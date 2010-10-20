@@ -102,12 +102,25 @@
 		
 		global $tweet_slideshow_options;
 		$tweet_slideshow_options = new stdClass;
-		$tweet_slideshow_options->username = get_option("tweet_slideshow_username", "macfanatic");
+		$tweet_slideshow_options->username = get_option("tweet_slideshow_username", "twitter");
 		$tweet_slideshow_options->interval = get_option("tweet_slideshow_interval", 5000);
 		$tweet_slideshow_options->global_limit = get_option("tweet_slideshow_global_limit", 9) + 1;
 		$tweet_slideshow_options->show_replies = get_option("tweet_slideshow_show_replies", "false") == "true" ? true : false;
 		$tweet_slideshow_options->timestamp = get_option("tweet_slideshow_update_timestamp", false);
 		
+	}
+	
+	
+	/**
+	 * tweet_slideshow_username()
+	 * Retrieves the username entered for the plugin settings
+	 *
+	 * @return string $username
+	 * @author Matt Brewer
+	 **/
+	function tweet_slideshow_username() {
+		global $tweet_slideshow_options;
+		return $tweet_slideshow_options->username;
 	}
 	
 	
