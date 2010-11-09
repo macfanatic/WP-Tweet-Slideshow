@@ -2,6 +2,7 @@
 
 	define('TWITTER_TIMELINE_URL', 'http://twitter.com/statuses/user_timeline/%s.json?count=%d');
 	define('TWITTER_SEARCH_URL', 'http://search.twitter.com/search.json?q=@%s&show_user=true');
+	define('TWEET_SLIDESHOW_ACTIVATION_MESSAGE', 'tweet_slideshow_activation_message');
 
 	/**
 	 * tweet_slideshow_init
@@ -26,9 +27,26 @@
 	 **/
 	add_action('tweet_slideshow_parse_twitter_event', 'retrieve_tweets_from_twitter_for_user');
 	function tweet_slideshow_activation() {
+		
+		// Add an option to store error messages from here on out
+		update_option(TWEET_SLIDESHOW_ACTIVATION_MESSAGE, "");
+		
+		// Check to see if this install will support the plugin's needs
+		if ( !tweet_slideshow_supported_configuration() ) {
+			
+			// Store the message to be displayed on the page
+			update_option(TWEET_SLIDESHOW_ACTIVATION_MESSAGE, "WP Tweet Slideshow requires Wordpress 3.0 or higher running on a server with PHP version 5.2 or greater.");
+			
+			// Deactivate the plugin
+			// deactivate_plugins(WP_TWEET_SLIDESHOW_DIR."/include.php");
+			
+		} else {
 
-		// Schedule an action to be called every hour.  Have attached a function to the event above for actually parsing the twitter response data
-		wp_schedule_event(time(), 'hourly', 'tweet_slideshow_parse_twitter_event');
+			// Schedule an action to be called every hour.  Have attached a function to the event above for actually parsing the twitter response data
+			wp_schedule_event(time(), 'hourly', 'tweet_slideshow_parse_twitter_event');
+			
+		}
+		
 	}
 	
 	
@@ -252,6 +270,36 @@
 		global $tweet_slideshow_options;
 		$tweet_slideshow_options->timestamp = time();
 		update_option("tweet_slideshow_update_timestamp", $tweet_slideshow_options->timestamp);
+	}
+	
+	
+	/**
+	 * tweet_slideshow_supported_configuration
+	 * Determines if this configuration will support this plugin
+	 *
+	 * @return boolean $supported
+	 * @author Matt Brewer
+	 **/
+	function tweet_slideshow_supported_configuration() {
+		return version_compare(phpversion(), "5.2.0") >= 0 && version_compare(get_bloginfo('version'), "3.0") >= 0;
+	}
+	
+		
+	/**
+	 * tweet_slideshow_admin_notices
+	 * Displays the additional admin messages we've defined outside the scope of our page (admin wide)
+	 *
+	 * @return void
+	 * @author Matt Brewer
+	 **/
+	
+	add_action('admin_notices', 'tweet_slideshow_admin_notices');
+	function tweet_slideshow_admin_notices() {
+		$message = get_option(TWEET_SLIDESHOW_ACTIVATION_MESSAGE);
+		if ( $message ) {
+			echo sprintf('<div class="error"><p><strong>%s</strong></p></div>', $message);
+			update_option(TWEET_SLIDESHOW_ACTIVATION_MESSAGE, "");
+		}
 	}
 
 ?>
