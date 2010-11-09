@@ -3,11 +3,12 @@
 /*
 Plugin Name: Tweet Slideshow
 Description: Creates a slideshow of tweets for a particular user wherever you want in your theme
-Version: 1.0
+Version: 1.1
 Author: Matt Brewer, http://www.dmgx.com
 
 */
 
+define('WP_TWEET_SLIDESHOW_VERSION', '1.1');
 define('WP_TWEET_SLIDESHOW_DIR', basename(dirname(__FILE__)));
 define('WP_TWEET_SLIDESHOW_TWEET_ITEM_FILTER', "wp_tweet_slideshow_tweet_item_filter");
 define('WP_TWEET_SLIDESHOW_NO_TWEETS_FILTER', "wp_tweet_slideshow_no_tweets_filter");
