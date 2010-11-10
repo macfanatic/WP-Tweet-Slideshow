@@ -1,9 +1,9 @@
 ul.tweetList {
-	width:300px;
-	margin-left:225px;
-	list-style:none;
-	height:46px;
 	position:relative;
+	list-style:none;
+	margin:10px;
+	width:300px;
+	height:46px;
 }
 
 ul.tweetList li {
